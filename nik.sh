@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 #///////////////////////////////////////////////////////////////////////////////
 #///////////////////////////////////////////////////////////////////////////////
 #////                       _            _  __                              ////
@@ -10,9 +10,7 @@
 #////                                                                       ////
 #///////////////////////////////////////////////////////////////////////////////
 #///////////////////////////////////////////////////////////////////////////////
-
 echo Selamat datang kak, Siapa nick kaka? #tulisan keluar
-
 read nick #membaca yang ditulis
 echo "================================================="
 echo "== ╦ ╦┌─┐┌─┐┬┌─┌─┐┬─┐  ┬┌┐┌┌┬┐┌─┐┌┐┌┌─┐┌─┐┬┌─┐ =="
@@ -20,21 +18,27 @@ echo "== ╠═╣├─┤│  ├┴┐├┤ ├┬┘  ││││ ││�
 echo "== ╩ ╩┴ ┴└─┘┴ ┴└─┘┴└─  ┴┘└┘─┴┘└─┘┘└┘└─┘└─┘┴┴ ┴ =="
 echo "================================================="
 echo Selamat datang $nick ":)"
-echo
-echo "Silahkan masukan NIK target"
-echo Contoh 1234567890876543
-read target # masukin NIK
-
-echo
-echo Apakah NIK $target "sudah benar?"
-echo y/n?
-read confirm
-echo
-if [ $confirm = "y" ]; then
-echo Melakukan Pengecekan NIK $target
-cek_target=`curl -s http://zpro.000webhostapp.com/api/cek_nik.php?nik=$target`
-echo $cek_target
+get_url=$(curl -s http://zlucifer.com/api/nik.php)
+cek='curl -s '$get_url # check status
+response=`curl -s -o /dev/null -w "%{http_code}" $cek`
+if [[ $response != *HACKER* ]]; then
+    echo
+    echo "Website Offline/Restart untuk sementara"
 else
-echo Kesalahan, silahkan coba lagi
+    echo
+    echo "Silahkan masukan NIK target"
+    echo Contoh 1234567890876543
+    read target # masukin NIK
+    echo
+    echo Apakah NIK $target "sudah benar?"
+    echo y/n?
+    read confirm
+    echo
+    if [ $confirm = "y" ]; then
+        echo Melakukan Pengecekan NIK $target
+        cek_target=`curl -s $get_url/nik.php?nik=$target`
+        echo -e $cek_target
+    else
+        echo Kesalahan, silahkan coba lagi
+    fi
 fi
-#echo $CURL_RESPONSE    #200
